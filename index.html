@@ -146,6 +146,32 @@ body{font-family:'Inter',sans-serif;background:#111;color:#fff;overflow:hidden;h
 </style>
 </head>
 <body>
+<!-- PASSWORD GATE -->
+<div id="gate" style="position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+  <div style="text-align:center;max-width:360px;width:100%;padding:0 24px">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:32px">
+      <div style="width:8px;height:8px;background:#A100FF;border-radius:50%"></div>
+      <span style="font-size:12px;font-weight:700;color:#fff">Accenture</span>
+      <span style="color:rgba(255,255,255,.25);font-size:14px">×</span>
+      <div style="width:8px;height:8px;background:var(--tf)"></div>
+      <span style="font-size:12px;font-weight:700;color:var(--tf)">Thermo Fisher Scientific</span>
+    </div>
+    <div style="width:40px;height:3px;background:var(--tf);margin:0 auto 24px"></div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px">Confidential Document</div>
+    <div style="font-size:22px;font-weight:900;color:#fff;margin-bottom:6px">CRG Data Capabilities</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:32px">Staffing Model · April 2026</div>
+    <input id="pw-input" type="password" placeholder="Enter password to continue"
+      style="width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:#fff;font-family:'Inter',sans-serif;font-size:13px;padding:12px 16px;outline:none;margin-bottom:10px;letter-spacing:1px"
+      onkeydown="if(event.key==='Enter')checkPw()"/>
+    <div id="pw-err" style="font-size:11px;color:var(--tf);margin-bottom:10px;min-height:16px;display:none">Incorrect password. Please try again.</div>
+    <button onclick="checkPw()"
+      style="width:100%;background:var(--tf);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:13px;cursor:pointer">
+      Unlock →
+    </button>
+    <div style="font-size:10px;color:rgba(255,255,255,.2);margin-top:20px">Accenture Confidential · Not for Distribution</div>
+  </div>
+</div>
+
 <div class="topbar">
   <div class="brand">
     <div class="brand-acc"><div class="acc-dot"></div>Accenture</div>
@@ -317,13 +343,6 @@ body{font-family:'Inter',sans-serif;background:#111;color:#fff;overflow:hidden;h
           </tr>
         </thead>
         <tbody>
-          <!-- OVERARCHING LEADERSHIP -->
-          <tr class="grp"><td colspan="9">Overarching Delivery Leadership</td></tr>
-          <tr class="dr"><td class="tl" contenteditable="true">Onshore Delivery Lead</td><td contenteditable="true"><span class="tp tp-al">All</span></td><td contenteditable="true">×1</td><td contenteditable="true" style="color:#085041;font-weight:700">×1</td><td contenteditable="true" class="dim">—</td><td contenteditable="true"><span class="cb-t">✓</span></td><td contenteditable="true"><span class="cb-np">✓</span></td><td contenteditable="true"><span class="cb-nd">✓</span></td><td contenteditable="true"><span class="cb-c">✓</span></td></tr>
-          <tr class="dr"><td class="tl" contenteditable="true">Offshore Delivery Lead</td><td contenteditable="true"><span class="tp tp-al">All</span></td><td contenteditable="true">×1</td><td contenteditable="true" style="color:#085041;font-weight:700">×1</td><td contenteditable="true" class="dim">—</td><td contenteditable="true"><span class="cb-t">✓</span></td><td contenteditable="true"><span class="cb-np">✓</span></td><td contenteditable="true"><span class="cb-nd">✓</span></td><td contenteditable="true"><span class="cb-c">✓</span></td></tr>
-          <tr class="dr"><td class="tl" contenteditable="true">Governance</td><td contenteditable="true"><span class="tp tp-al">All</span></td><td contenteditable="true">×1</td><td contenteditable="true" style="color:#085041;font-weight:700">×1</td><td contenteditable="true" class="dim">—</td><td contenteditable="true"><span class="cb-t">✓</span></td><td contenteditable="true"><span class="cb-np">✓</span></td><td contenteditable="true"><span class="cb-nd">✓</span></td><td contenteditable="true"><span class="cb-c">✓</span></td></tr>
-          <tr class="stl"><td class="tl" contenteditable="true">Subtotal</td><td></td><td contenteditable="true">3</td><td contenteditable="true" style="color:#085041;font-weight:700">3</td><td contenteditable="true" class="dim">0</td><td colspan="4"></td></tr>
-
           <!-- LEADERSHIP & MANAGEMENT -->
           <tr class="grp"><td colspan="9">Leadership &amp; Management</td></tr>
           <tr class="dr"><td class="tl" contenteditable="true">Sr. Technical Lead</td><td contenteditable="true"><span class="tp tp-sh">Shared</span></td><td contenteditable="true">×3</td><td contenteditable="true" style="color:#085041;font-weight:700">×2</td><td contenteditable="true" class="red">−1</td><td contenteditable="true"><span class="cb-t">×1</span></td><td contenteditable="true"><span class="cb-np">×1</span></td><td contenteditable="true" class="dim">—</td><td contenteditable="true" class="dim">—</td></tr>
@@ -372,6 +391,13 @@ body{font-family:'Inter',sans-serif;background:#111;color:#fff;overflow:hidden;h
           <tr class="dr"><td class="tl" contenteditable="true">CADM Testing &amp; Compliance</td><td contenteditable="true"><span class="tp tp-dd">Ded.</span></td><td contenteditable="true">×1</td><td contenteditable="true" style="color:#085041;font-weight:700">×1</td><td contenteditable="true" class="dim">—</td><td contenteditable="true"><span class="cb-t">×1</span></td><td contenteditable="true" class="dim">—</td><td contenteditable="true" class="dim">—</td><td contenteditable="true" class="dim">—</td></tr>
           <tr class="dr"><td class="tl" contenteditable="true">Scrum Master</td><td contenteditable="true"><span class="tp tp-dd">Ded.</span></td><td contenteditable="true">×1</td><td contenteditable="true" style="color:#085041;font-weight:700">×1</td><td contenteditable="true" class="dim">—</td><td contenteditable="true" class="dim">—</td><td contenteditable="true" class="dim">—</td><td contenteditable="true" class="dim">—</td><td contenteditable="true"><span class="cb-c">×1</span></td></tr>
           <tr class="stl"><td class="tl" contenteditable="true">Subtotal</td><td></td><td contenteditable="true">2</td><td contenteditable="true" style="color:#085041;font-weight:700">2</td><td contenteditable="true" class="dim">0</td><td colspan="4"></td></tr>
+
+          <!-- OVERARCHING DELIVERY LEADERSHIP — moved to bottom -->
+          <tr class="grp"><td colspan="9">Overarching Delivery Leadership</td></tr>
+          <tr class="dr"><td class="tl" contenteditable="true">Onshore Delivery Lead</td><td contenteditable="true"><span class="tp tp-al">All</span></td><td contenteditable="true">×1</td><td contenteditable="true" style="color:#085041;font-weight:700">×1</td><td contenteditable="true" class="dim">—</td><td contenteditable="true"><span class="cb-t">✓</span></td><td contenteditable="true"><span class="cb-np">✓</span></td><td contenteditable="true"><span class="cb-nd">✓</span></td><td contenteditable="true"><span class="cb-c">✓</span></td></tr>
+          <tr class="dr"><td class="tl" contenteditable="true">Offshore Delivery Lead</td><td contenteditable="true"><span class="tp tp-al">All</span></td><td contenteditable="true">×1</td><td contenteditable="true" style="color:#085041;font-weight:700">×1</td><td contenteditable="true" class="dim">—</td><td contenteditable="true"><span class="cb-t">✓</span></td><td contenteditable="true"><span class="cb-np">✓</span></td><td contenteditable="true"><span class="cb-nd">✓</span></td><td contenteditable="true"><span class="cb-c">✓</span></td></tr>
+          <tr class="dr"><td class="tl" contenteditable="true">Governance</td><td contenteditable="true"><span class="tp tp-al">All</span></td><td contenteditable="true">×1</td><td contenteditable="true" style="color:#085041;font-weight:700">×1</td><td contenteditable="true" class="dim">—</td><td contenteditable="true"><span class="cb-t">✓</span></td><td contenteditable="true"><span class="cb-np">✓</span></td><td contenteditable="true"><span class="cb-nd">✓</span></td><td contenteditable="true"><span class="cb-c">✓</span></td></tr>
+          <tr class="stl"><td class="tl" contenteditable="true">Subtotal</td><td></td><td contenteditable="true">3</td><td contenteditable="true" style="color:#085041;font-weight:700">3</td><td contenteditable="true" class="dim">0</td><td colspan="4"></td></tr>
         </tbody>
       </table>
 
@@ -388,8 +414,76 @@ body{font-family:'Inter',sans-serif;background:#111;color:#fff;overflow:hidden;h
   </div>
 </div>
 
-<!-- S6 -->
+<!-- S6: ASSUMPTIONS -->
 <div class="slide" id="slide-6">
+  <div class="chrome">
+    <div class="ch-head"><div><div class="eyebrow">Assumptions &amp; Enablers</div><h2>What Needs to Be True to <span style="color:var(--tf)">Realize AI-Driven Efficiency</span></h2></div><div class="ch-num">06</div></div>
+    <div class="ch-body">
+      <p style="font-size:12px;color:#666;margin-bottom:16px">The 24% headcount reduction is predicated on the following assumptions and enabling conditions being in place. Where these are not yet in place, they represent active workstreams.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+
+        <div style="border-left:4px solid var(--tf);background:#fff8f8;padding:16px 20px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tf);margin-bottom:10px">🤖 AI &amp; Automation Tooling</div>
+          <div style="font-size:11.5px;color:#444;line-height:1.7">
+            <div style="margin-bottom:6px">✦ AI-assisted code generation tools (e.g. GitHub Copilot, Databricks Assistant) are licensed and deployed across development teams, reducing manual engineering effort by an estimated 30–40%.</div>
+            <div style="margin-bottom:6px">✦ Automated testing frameworks replace manual QA cycles for regression and ETL validation — prerequisite to reducing QA headcount.</div>
+            <div>✦ Data quality monitoring tools (e.g. Monte Carlo, Great Expectations) are in place to automate anomaly detection, reducing manual data quality analyst load.</div>
+          </div>
+        </div>
+
+        <div style="border-left:4px solid #0a4a7c;background:#f0f6ff;padding:16px 20px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#0a4a7c;margin-bottom:10px">🏛️ Governance &amp; Operating Model</div>
+          <div style="font-size:11.5px;color:#444;line-height:1.7">
+            <div style="margin-bottom:6px">✦ A clearly defined intake and prioritization process is in place and consistently followed — preventing ad hoc demand from bypassing the shared pool model.</div>
+            <div style="margin-bottom:6px">✦ Cross-segment resource sharing is formally agreed upon with segment leads — roles in the shared pool can be allocated across Transition, New, and Customer without friction.</div>
+            <div>✦ Delivery accountability is owned at the Onshore / Offshore Lead level, with standardized sprint cadences enabling fewer PMs to manage more workstreams.</div>
+          </div>
+        </div>
+
+        <div style="border-left:4px solid #085041;background:#f0faf5;padding:16px 20px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#085041;margin-bottom:10px">📦 Platform &amp; Infrastructure Readiness</div>
+          <div style="font-size:11.5px;color:#444;line-height:1.7">
+            <div style="margin-bottom:6px">✦ The CRG data platform (Snowflake / Databricks) is sufficiently mature to support self-service patterns — reducing dependency on dedicated engineering for routine data requests.</div>
+            <div style="margin-bottom:6px">✦ CI/CD pipelines are established so developers spend time on net-new work rather than manual deployment and environment management.</div>
+            <div>✦ Reusable data product templates and ingestion frameworks are available, enabling faster delivery with fewer bespoke engineering resources per project.</div>
+          </div>
+        </div>
+
+        <div style="border-left:4px solid #8a5e00;background:#fffbee;padding:16px 20px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8a5e00;margin-bottom:10px">👥 People &amp; Knowledge Transfer</div>
+          <div style="font-size:11.5px;color:#444;line-height:1.7">
+            <div style="margin-bottom:6px">✦ Structured knowledge transfer from incumbent resources (rebadged or exiting) is completed before headcount reductions take effect — preventing delivery risk during transition.</div>
+            <div style="margin-bottom:6px">✦ Resources in the shared pool are cross-trained across at least two domains (e.g. SQL/DE + QA, BSA + Governance) to enable flexible deployment.</div>
+            <div>✦ AI upskilling is embedded into onboarding — all new Accenture resources are expected to use AI-assisted tooling as a baseline, not an add-on.</div>
+          </div>
+        </div>
+
+        <div style="border-left:4px solid var(--flex);background:#f5f0ff;padding:16px 20px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--flex);margin-bottom:10px">📊 Demand Stability &amp; Forecasting</div>
+          <div style="font-size:11.5px;color:#444;line-height:1.7">
+            <div style="margin-bottom:6px">✦ Sponsor demand is reasonably predictable on a 30/60/90-day horizon — enabling the shared pool to be planned proactively rather than reactively staffed.</div>
+            <div style="margin-bottom:6px">✦ A formal capacity review cadence (bi-weekly) is in place so flex-in / flex-out decisions are made with lead time, not at the last minute.</div>
+            <div>✦ Tier 1 support volumes are measured and trending down as platform stability improves — the reduction from ×7 to ×5 assumes a maturing platform with fewer recurring incidents.</div>
+          </div>
+        </div>
+
+        <div style="border-left:4px solid #555;background:#f5f5f5;padding:16px 20px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:10px">⚠️ Risks &amp; Mitigations</div>
+          <div style="font-size:11.5px;color:#444;line-height:1.7">
+            <div style="margin-bottom:6px">✦ <strong>Risk:</strong> AI tooling adoption is slower than expected. <strong>Mitigation:</strong> Stage reductions — hold BSA and QA pool at full count for first 90 days while tooling embeds.</div>
+            <div style="margin-bottom:6px">✦ <strong>Risk:</strong> Shared pool creates contention during peak demand. <strong>Mitigation:</strong> Define segment SLAs and a clear escalation path to the Delivery Lead for allocation disputes.</div>
+            <div>✦ <strong>Risk:</strong> Knowledge loss during rebadging / transition. <strong>Mitigation:</strong> Minimum 4-week parallel running period mandated before any incumbent exits.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="ch-foot"><span>Accenture × Thermo Fisher Scientific — CRG Data Capabilities Staffing Review</span><span>CONFIDENTIAL</span></div>
+  </div>
+</div>
+
+<!-- S7 -->
+<div class="slide" id="slide-7">
   <div class="chrome">
     <div class="ch-head"><div><div class="eyebrow">The Solution</div><h2>A Three-Tier Operating Model <span style="color:var(--tf)">Built Around Shared Capability</span></h2></div><div class="ch-num">06</div></div>
     <div class="ch-body">
@@ -421,11 +515,23 @@ body{font-family:'Inter',sans-serif;background:#111;color:#fff;overflow:hidden;h
   <div class="ndot" onclick="goTo(4)"></div>
   <div class="ndot" onclick="goTo(5)"></div>
   <div class="ndot" onclick="goTo(6)"></div>
+  <div class="ndot" onclick="goTo(7)"></div>
   <button class="nbtn" onclick="next()">&#8594;</button>
 </div>
 
 <script>
-var cur=1,tot=6;
+function checkPw(){
+  var v=document.getElementById('pw-input').value;
+  var err=document.getElementById('pw-err');
+  if(v==='SarahCelina'){
+    document.getElementById('gate').style.display='none';
+  } else {
+    err.style.display='block';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+var cur=1,tot=7;
 function goTo(n){
   document.getElementById('slide-'+cur).classList.remove('active');
   document.getElementById('slide-'+n).classList.add('active');
