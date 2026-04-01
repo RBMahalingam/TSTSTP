@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRG Data Capabilities — Staffing Model</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--acc:#A100FF;--tf:#C8102E;--black:#000;--dark:#1a1a1a;--gray:#6b6b6b;--light:#f5f5f5;--white:#fff;--border:#e8e8e8;--core:#007A7D;--flex:#6B00AA}
+body{font-family:'Inter',sans-serif;background:#111;color:#fff;overflow:hidden;height:100vh}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(0,0,0,.97);border-bottom:2px solid var(--tf);display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:48px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-acc{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#fff}
+.acc-dot{width:8px;height:8px;background:var(--acc);border-radius:50%}
+.brand-sep{color:rgba(255,255,255,.25);font-size:14px;margin:0 4px}
+.brand-tf{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--tf)}
+.tf-sq{width:8px;height:8px;background:var(--tf)}
+.brand-sub{font-size:10px;color:rgba(255,255,255,.3);margin-left:4px;font-weight:400}
+.top-counter{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:1px}
+.slides{width:100%;height:100vh;position:relative}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;opacity:0;transition:opacity .35s;padding-top:48px}
+.slide.active{display:flex;opacity:1}
+.nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;z-index:100;background:rgba(0,0,0,.75);padding:7px 16px;border-radius:40px;border:1px solid rgba(255,255,255,.1)}
+.ndot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .2s}
+.ndot.active{background:var(--tf);transform:scale(1.3)}
+.nbtn{background:none;border:1px solid rgba(255,255,255,.2);color:#fff;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:11px;font-family:'Inter',sans-serif;transition:all .2s}
+.nbtn:hover{background:rgba(255,255,255,.08)}
+.chrome{background:var(--white);flex:1;display:flex;flex-direction:column;color:var(--black);overflow:hidden}
+.chrome.dark{background:#0a0a0a;color:#fff}
+.ch-head{padding:22px 48px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end;flex-shrink:0}
+.ch-head.dark{border-color:rgba(255,255,255,.07)}
+.eyebrow{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--tf);margin-bottom:5px;display:flex;align-items:center;gap:7px}
+.eyebrow::before{content:'';width:14px;height:2px;background:var(--tf)}
+.ch-head h2{font-size:22px;font-weight:900;line-height:1.1;letter-spacing:-.4px}
+.ch-num{font-size:52px;font-weight:900;color:rgba(0,0,0,.05);line-height:1}
+.ch-num.dk{color:rgba(255,255,255,.04)}
+.ch-body{padding:16px 48px;flex:1;overflow:auto}
+.ch-foot{padding:8px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:10px;color:#aaa;flex-shrink:0}
+.ch-foot.dark{border-color:rgba(255,255,255,.06);color:rgba(255,255,255,.2)}
+.s1{background:var(--black)}
+.s1-wrap{position:relative;flex:1;display:flex}
+.s1-left{width:58%;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:52px 56px 72px;z-index:1}
+.s1-right{position:absolute;right:0;top:0;width:45%;height:100%;background:var(--tf);clip-path:polygon(14% 0,100% 0,100% 100%,0% 100%)}
+.s1-ri{position:absolute;right:0;top:0;width:43%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;padding:56px 44px;z-index:2}
+.s1-ey{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--tf);margin-bottom:16px;display:flex;align-items:center;gap:7px}
+.s1-ey::before{content:'';width:18px;height:2px;background:var(--tf)}
+.s1-title{font-size:50px;font-weight:900;line-height:.93;letter-spacing:-2px;color:#fff;margin-bottom:20px}
+.s1-title .red{color:var(--tf)}
+.s1-rule{width:44px;height:3px;background:var(--tf);margin-bottom:24px}
+.s1-desc{font-size:13px;color:rgba(255,255,255,.55);line-height:1.7;max-width:460px;margin-bottom:36px}
+.s1-meta{display:flex;gap:28px;flex-wrap:wrap}
+.s1-mi .lbl{font-size:9px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px}
+.s1-mi .val{font-size:12px;font-weight:600;color:#fff}
+.s1-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.13);padding:5px 12px;font-size:10px;color:rgba(255,255,255,.4);margin-top:28px}
+.s1-badge::before{content:'';width:5px;height:5px;background:var(--tf);border-radius:50%}
+.s1rs{text-align:right;margin-bottom:28px}
+.s1rs .big{font-size:52px;font-weight:900;color:#fff;line-height:1}
+.s1rs .sm{font-size:11px;color:rgba(255,255,255,.65);margin-top:3px}
+.s1-rdiv{width:36px;height:2px;background:rgba(255,255,255,.25);margin:20px 0 20px auto}
+.u-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border)}
+.u-card{background:#fff;padding:22px;transition:background .15s}
+.u-card:hover{background:#fafafa}
+.u-card.active-card{background:var(--tf)}
+.u-card.active-card .uc-title{color:#fff}
+.u-card.active-card .uc-body{color:rgba(255,255,255,.85)}
+.uc-icon{font-size:20px;margin-bottom:10px;display:block}
+.uc-title{font-size:13px;font-weight:700;color:var(--black);margin-bottom:6px}
+.uc-body{font-size:11.5px;color:var(--gray);line-height:1.6}
+.focus-tag{display:inline-flex;align-items:center;gap:7px;margin-top:18px;font-size:11px;font-weight:600;color:var(--tf)}
+.focus-tag::before{content:'';width:6px;height:6px;background:var(--tf);border-radius:50%}
+.exec-grid{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start;margin-bottom:16px}
+.exec-left{background:var(--tf);padding:28px 24px}
+.exec-left p{font-size:13px;line-height:1.7;color:#fff}
+.exec-right{display:flex;flex-direction:column;gap:8px}
+.principle{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1.5px solid var(--border);padding:12px 16px;transition:border-color .2s}
+.principle:hover{border-color:var(--tf)}
+.pi{font-size:16px;flex-shrink:0;margin-top:1px}
+.pt{font-size:12px;font-weight:700;color:var(--black);margin-bottom:2px}
+.pb{font-size:11px;color:var(--gray);line-height:1.45}
+.enabling{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.en-card{background:var(--black);padding:16px;display:flex;align-items:flex-start;gap:10px}
+.en-num{font-size:26px;font-weight:900;color:var(--tf);flex-shrink:0;line-height:1}
+.en-text{font-size:11px;color:#bbb;line-height:1.5;margin-top:2px}
+.roles-intro{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px}
+.ri-card{border:1.5px solid var(--border);padding:16px 20px;background:#fff}
+.ri-card .ri-num{font-size:32px;font-weight:900;color:var(--tf);line-height:1}
+.ri-card .ri-lbl{font-size:11px;color:#888;margin-top:3px}
+.roles-table{width:100%;border-collapse:collapse;font-size:11.5px}
+.roles-table th{background:var(--black);color:#fff;padding:9px 14px;text-align:left;font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
+.roles-table th.tc{text-align:center}
+.roles-table td{padding:8px 14px;border-bottom:1px solid var(--border);vertical-align:middle;color:#444}
+.roles-table td.tc{text-align:center}
+.roles-table tr:hover td{background:#fafafa}
+.sec-row td{background:var(--tf)!important;color:#fff;font-weight:700;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:6px 14px!important}
+.rname{font-weight:700;color:var(--black)!important}
+.seg-pill{display:inline-block;font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;font-family:'Inter',sans-serif}
+.sp-t{background:#ece9fc;color:#3C3489}
+.sp-n{background:#d6f2e8;color:#085041}
+.sp-c{background:#fce9e2;color:#712B13}
+.cnt-badge{display:inline-block;background:var(--tf);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.seg-tbl{width:100%;border-collapse:collapse;font-size:11px}
+.seg-tbl th{padding:9px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;text-align:center;border-bottom:2px solid #ddd}
+.seg-tbl th.tl{text-align:left}
+.seg-tbl .grp td{background:#e8e8e6;padding:6px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#555;border-top:2px solid #d0d0ce;border-bottom:1px solid #d0d0ce}
+.seg-tbl .dr td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:middle;text-align:center}
+.seg-tbl .dr td.tl{text-align:left;font-weight:600;color:var(--black)}
+.seg-tbl .dr:hover td{background:#fafafa}
+.seg-tbl .dr.sub td{background:#fafafa;font-size:10.5px;color:#666}
+.seg-tbl .dr.sub td.tl{padding-left:26px}
+.seg-tbl .dr.elim td{background:#fdf5ff}
+.seg-tbl .dr.elim td.tl{color:#888;text-decoration:line-through}
+.seg-tbl .stl td{background:#f7f7f5;padding:5px 12px;font-size:10px;font-style:italic;font-weight:700;color:#555;border-top:1px solid #ddd;border-bottom:2px solid #ddd;text-align:center}
+.seg-tbl .stl td.tl{text-align:left}
+.seg-tbl .gtot td{background:var(--black);padding:9px 12px;font-weight:800;font-size:12px;text-align:center;color:#ccc}
+.seg-tbl .gtot td.tl{text-align:left;color:#fff}
+.tp{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;white-space:nowrap}
+.tp-sh{background:#FFF0C2;color:#8a5e00;border:1px solid #E6A817}
+.tp-dd{background:#eeeeff;color:#444499;border:1px solid #aaaadd}
+.tp-al{background:#d6f2e8;color:#085041;border:1px solid #085041}
+.tp-el{background:#f3e8ff;color:#6c3483;border:1px solid #9b59b6}
+.cb-t{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:#ece9fc;color:#3C3489}
+.cb-n{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:#d6f2e8;color:#085041}
+.cb-c{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:#fce9e2;color:#712B13}
+.red{color:var(--tf);font-weight:700}
+.dim{color:#bbb}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.model-layer{padding:16px 20px;margin-bottom:10px;border-left:4px solid}
+.ml-d{background:#f0faf5;border-color:#1D9E75}
+.ml-s{background:#fffbee;border-color:#E6A817}
+.ml-g{background:#f5f0ff;border-color:var(--flex)}
+.ml-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.ml-d .ml-title{color:#085041}.ml-s .ml-title{color:#8a5e00}.ml-g .ml-title{color:var(--flex)}
+.layer-roles{display:flex;flex-wrap:wrap;gap:4px}
+.chip{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border:1.5px solid;font-family:'Inter',sans-serif}
+.cg{background:#d6f2e8;color:#085041;border-color:#085041}
+.ca{background:#FFF0C2;color:#8a5e00;border-color:#E6A817}
+.cp{background:#ece9fc;color:var(--flex);border-color:var(--flex)}
+.ct{background:#e1f5ee;color:#0F6E56;border-color:#0F6E56}
+.cc{background:#fce9e2;color:#712B13;border-color:#712B13}
+.side-stats{display:flex;flex-direction:column;gap:10px}
+.sr{display:flex;align-items:center;gap:12px;background:var(--light);padding:13px 16px;border-left:3px solid var(--tf)}
+.sr .sn{font-size:24px;font-weight:900;min-width:48px}
+.sr .st{font-size:12px;color:#444;line-height:1.4}
+.sr .st strong{color:var(--black)}
+.n-tf{color:var(--tf)}.n-am{color:#8a5e00}.n-pu{color:var(--flex)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-acc"><div class="acc-dot"></div>Accenture</div>
+    <div class="brand-sep">×</div>
+    <div class="brand-tf"><div class="tf-sq"></div>Thermo Fisher Scientific</div>
+    <div class="brand-sub">· CRG Data Capabilities</div>
+  </div>
+  <div class="top-counter" id="counter-top">01 / 06</div>
+</div>
+
+<div class="slides">
+
+<!-- S1 -->
+<div class="slide s1 active" id="slide-1">
+  <div class="s1-wrap">
+    <div class="s1-left">
+      <div class="s1-ey">CRG Data Capabilities · Confidential</div>
+      <div class="s1-title">OPTIMIZING YOUR<br>DATA <span class="red">STAFFING</span><br>MODEL</div>
+      <div class="s1-rule"></div>
+      <div class="s1-desc">A strategic review of the current staffing structure across New, Transition, and Customer segments — with a proposed shared resource model delivering a 31% reduction in total headcount while preserving full delivery capability.</div>
+      <div class="s1-meta">
+        <div class="s1-mi"><div class="lbl">Prepared by</div><div class="val">Accenture Data Practice</div></div>
+        <div class="s1-mi"><div class="lbl">Client</div><div class="val">Thermo Fisher · CRG</div></div>
+        <div class="s1-mi"><div class="lbl">Date</div><div class="val">April 2026</div></div>
+        <div class="s1-mi"><div class="lbl">Version</div><div class="val">1.0 — Draft for Review</div></div>
+      </div>
+      <div class="s1-badge">Accenture Confidential · Not for Distribution</div>
+    </div>
+    <div class="s1-right"></div>
+    <div class="s1-ri">
+      <div class="s1rs"><div class="big">58</div><div class="sm">Original headcount</div></div>
+      <div class="s1-rdiv"></div>
+      <div class="s1rs"><div class="big">40</div><div class="sm">Target headcount</div></div>
+      <div class="s1-rdiv"></div>
+      <div class="s1rs"><div class="big">−31%</div><div class="sm">Overall reduction</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S2 -->
+<div class="slide" id="slide-2">
+  <div class="chrome">
+    <div class="ch-head"><div><div class="eyebrow">Our Understanding</div><h2>The Requests from CRG Data <span style="color:var(--tf)">Capabilities</span></h2></div><div class="ch-num">02</div></div>
+    <div class="ch-body">
+      <p style="font-size:12px;color:#666;margin-bottom:14px">Four workstreams identified — Customer Pod, New Roles and Transition Roles are the focus of this staffing model</p>
+      <div class="u-grid">
+        <div class="u-card active-card"><span class="uc-icon">👥</span><div class="uc-title">Customer Pod</div><div class="uc-body">Establish and operate a dedicated POD for the CRG Data Capabilities Portfolio to centrally manage sponsor engagements. Scope includes intake governance, prioritization, execution oversight, quality &amp; compliance control, and stakeholder transparency — delivered through a scalable, partner-led delivery structure.</div></div>
+        <div class="u-card active-card"><span class="uc-icon">👤</span><div class="uc-title">New Roles</div><div class="uc-body">Provide net new staffing to support emerging data domain and governance needs across CRG. Initial scope is focused on Celina's Platforms team — sourcing and onboarding key leads before expanding to broader team build-out across Platform, Data Domains, and Data Governance functions.</div></div>
+        <div class="u-card active-card"><span class="uc-icon">🔄</span><div class="uc-title">Transition Roles</div><div class="uc-body">Manage the structured transition of existing CRG roles to Accenture, covering two streams: (1) rebadging of current CRG staff, and (2) backfilling positions currently held by incumbent partners with Accenture-sourced resources aligned to the Platform domain.</div></div>
+        <div class="u-card"><span class="uc-icon">⚙️</span><div class="uc-title">Ingestion Framework</div><div class="uc-body">Design, build, and operationalize a production-grade data ingestion framework supporting CRG's data platform — covering pipeline architecture, source connectivity, data quality standards, and scalable infrastructure. Scope to be aligned with Srikar.</div></div>
+      </div>
+      <div class="focus-tag">Customer Pod, New Roles &amp; Transition Roles are the focus of this staffing model</div>
+    </div>
+    <div class="ch-foot"><span>Accenture × Thermo Fisher Scientific — CRG Data Capabilities Staffing Review</span><span>CONFIDENTIAL</span></div>
+  </div>
+</div>
+
+<!-- S3 -->
+<div class="slide" id="slide-3">
+  <div class="chrome">
+    <div class="ch-head"><div><div class="eyebrow">Executive Summary</div><h2>A Model Built for <span style="color:var(--tf)">Scale, Speed &amp; Quality</span></h2></div><div class="ch-num">03</div></div>
+    <div class="ch-body">
+      <div class="exec-grid">
+        <div class="exec-left"><p>Accenture is proposing a model to support CRG Data's staffing needs — focusing on driving the rapid intake, prioritization, and delivery of sponsor projects via the development of an <strong>Engagement POD</strong>, which leverages the following principles…</p></div>
+        <div class="exec-right">
+          <div class="principle"><div class="pi">🏛️</div><div><div class="pt">Strong Governance</div><div class="pb">Strengthen intake governance and prioritization while providing predictable execution and delivery transparency across the portfolio.</div></div></div>
+          <div class="principle"><div class="pi">✅</div><div><div class="pt">Embedded Quality &amp; Compliance</div><div class="pb">Ensure Data &amp; AI quality, regulatory compliance, and architectural alignment through standardized delivery frameworks.</div></div></div>
+          <div class="principle"><div class="pi">⚡</div><div><div class="pt">Leverage a Core / Flex Model</div><div class="pb">Bring the right resource, at the right time, for the right task — a shared pool serves steady-state demand while dedicated roles absorb segment-specific work.</div></div></div>
+          <div class="principle"><div class="pi">🔁</div><div><div class="pt">Iterative Delivery &amp; Optimization</div><div class="pb">Applies a co-design and co-development approach, rapidly testing and iterating solutions before optimizing for scale and impact across CRG workstreams.</div></div></div>
+          <div class="principle"><div class="pi">👥</div><div><div class="pt">Dedicated, Sponsor-Centric POD with End-to-End Ownership</div><div class="pb">A cross-functional Customer POD acting as an extension of CRG Data, owning centralized sponsor intake and delivery.</div></div></div>
+        </div>
+      </div>
+      <div class="enabling">
+        <div class="en-card"><div class="en-num">1</div><div class="en-text">Realize results through operational rigor and delivery stability</div></div>
+        <div class="en-card"><div class="en-num">2</div><div class="en-text">Support steady-state demands while flexing up to meet new requests</div></div>
+        <div class="en-card"><div class="en-num">3</div><div class="en-text">Operate with defined success metrics and strong knowledge transfer</div></div>
+      </div>
+    </div>
+    <div class="ch-foot"><span>Accenture × Thermo Fisher Scientific — CRG Data Capabilities Staffing Review</span><span>CONFIDENTIAL</span></div>
+  </div>
+</div>
+
+<!-- S4 -->
+<div class="slide" id="slide-4">
+  <div class="chrome">
+    <div class="ch-head"><div><div class="eyebrow">Original Staffing Ask</div><h2>The Full 58-Role Request — <span style="color:var(--tf)">Breakdown by Segment &amp; Domain</span></h2></div><div class="ch-num">04</div></div>
+    <div class="ch-body">
+      <div class="roles-intro">
+        <div class="ri-card"><div class="ri-num">58</div><div class="ri-lbl">Total roles requested across all segments</div></div>
+        <div class="ri-card"><div class="ri-num">3</div><div class="ri-lbl">Segments — New, Transition &amp; Customer</div></div>
+        <div class="ri-card"><div class="ri-num">7</div><div class="ri-lbl">Role types duplicated across 2+ segments</div></div>
+      </div>
+      <table class="roles-table">
+        <thead><tr><th style="width:28%">Role</th><th class="tc" style="width:10%">Count</th><th class="tc" style="width:14%">Segment</th><th class="tc" style="width:14%">Domain</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr class="sec-row"><td colspan="5">Customer POD — 12 Roles</td></tr>
+          <tr><td class="rname">Scrum Master</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-c">Customer</span></td><td class="tc">POD Delivery</td><td>Facilitates Agile ceremonies; embedded in Customer POD</td></tr>
+          <tr><td class="rname">Business Systems Analyst (BSA)</td><td class="tc"><span class="cnt-badge">×2</span></td><td class="tc"><span class="seg-pill sp-c">Customer</span></td><td class="tc">Business Analysis</td><td>Requirements and stakeholder liaison within Customer POD</td></tr>
+          <tr><td class="rname">Databricks Developer</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-c">Customer</span></td><td class="tc">Development</td><td>Customer-specific platform; no equivalent in other segments</td></tr>
+          <tr><td class="rname">SQL Dev / Data Engineer</td><td class="tc"><span class="cnt-badge">×2</span></td><td class="tc"><span class="seg-pill sp-c">Customer</span></td><td class="tc">SQL &amp; Data Eng.</td><td>Overlap with Transition SQL engineers — shared pool candidate</td></tr>
+          <tr><td class="rname">Talend Developer</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-c">Customer</span></td><td class="tc">SQL &amp; Data Eng.</td><td>ETL delivery; Transition has ×2 Sr. Talend — consolidation opportunity</td></tr>
+          <tr><td class="rname">QA Tester</td><td class="tc"><span class="cnt-badge">×2</span></td><td class="tc"><span class="seg-pill sp-c">Customer</span></td><td class="tc">QA &amp; Testing</td><td>Overlap with Transition QA — shared pool candidate</td></tr>
+          <tr><td class="rname">Onshore Lead / PM Lead</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-c">Customer</span></td><td class="tc">Delivery Leadership</td><td>Elevated to cross-segment Delivery Lead in proposed model</td></tr>
+          <tr><td class="rname">Governance / Data Partners</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-c">Customer</span></td><td class="tc">Data Governance</td><td>MDM governance; overlaps with New segment MDM analysts</td></tr>
+          <tr><td class="rname">Offshore Lead / DS Program Lead</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-c">Customer</span></td><td class="tc">Delivery Leadership</td><td>Elevated to cross-segment Offshore Delivery Lead in proposed model</td></tr>
+          <tr class="sec-row"><td colspan="5">New Roles — 16 Roles</td></tr>
+          <tr><td class="rname">Sr. Technical Lead</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-n">New</span></td><td class="tc">Platform</td><td>Shared pool candidate alongside Transition Sr. Technical Lead</td></tr>
+          <tr><td class="rname">Sr. Technical Lead</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-n">New</span></td><td class="tc">Platform</td><td>Shared pool candidate alongside Transition Sr. Technical Lead</td></tr>
+          <tr><td class="rname">Data Architect</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-n">New</span></td><td class="tc">Platform</td><td>Cross-segment architecture authority; leverage across all segments</td></tr>
+          <tr><td class="rname">Portfolio Manager</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-n">New</span></td><td class="tc">Platform</td><td>Combined with Product Manager into single shared PM role</td></tr>
+          <tr><td class="rname">Product Manager</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-n">New</span></td><td class="tc">Platform</td><td>Combined with Portfolio Manager into single shared PM role</td></tr>
+          <tr><td class="rname">Technical Delivery Lead</td><td class="tc"><span class="cnt-badge">×2</span></td><td class="tc"><span class="seg-pill sp-n">New</span></td><td class="tc">Data Domains</td><td>Dedicated to New segment Platform domain</td></tr>
+          <tr><td class="rname">Data Governance / MDM Analyst</td><td class="tc"><span class="cnt-badge">×4</span></td><td class="tc"><span class="seg-pill sp-n">New</span></td><td class="tc">Data Domains</td><td>Data Domains focus — consolidated into central governance team</td></tr>
+          <tr><td class="rname">BSA</td><td class="tc"><span class="cnt-badge">×2</span></td><td class="tc"><span class="seg-pill sp-n">New</span></td><td class="tc">Data Domains</td><td>Shared pool with Transition (×4) and Customer (×2) BSAs</td></tr>
+          <tr><td class="rname">Data Governance / MDM Analyst</td><td class="tc"><span class="cnt-badge">×2</span></td><td class="tc"><span class="seg-pill sp-n">New</span></td><td class="tc">Data Governance</td><td>Data Governance focus — consolidated into central governance team</td></tr>
+          <tr><td class="rname">Data Quality Engineer</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-n">New</span></td><td class="tc">Governance</td><td>New Governance only; extend scope to all segments in proposed model</td></tr>
+          <tr class="sec-row"><td colspan="5">Transition Roles — Platform Domain (~30 Roles)</td></tr>
+          <tr><td class="rname">BSA</td><td class="tc"><span class="cnt-badge">×4</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">Business Analysis</td><td>Largest BSA concentration; prime shared pool candidate across all segments</td></tr>
+          <tr><td class="rname">DBT / Snowflake Developer</td><td class="tc"><span class="cnt-badge">×2</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">Development</td><td>Transition-dedicated; related to CADM Sr. DBT/SQL (×1)</td></tr>
+          <tr><td class="rname">CADM Sr. DBT / SQL</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">Development</td><td>CADM-specific; keep dedicated to Transition</td></tr>
+          <tr><td class="rname">Developer (Post-Prod Support)</td><td class="tc"><span class="cnt-badge">×2</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">Development</td><td>Post-production support; Transition-specific</td></tr>
+          <tr><td class="rname">SQL / Data Engineer</td><td class="tc"><span class="cnt-badge">×4</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">SQL &amp; Data Eng.</td><td>Merged into shared SQL / Data Engineer pool</td></tr>
+          <tr><td class="rname">Sr. Talend Developer</td><td class="tc"><span class="cnt-badge">×2</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">SQL &amp; Data Eng.</td><td>ETL delivery; shared pool with Customer Talend Developer</td></tr>
+          <tr><td class="rname">ETL Tester / General QA</td><td class="tc"><span class="cnt-badge">×3</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">QA &amp; Testing</td><td>Merged into shared QA / ETL Tester pool with Customer QA roles</td></tr>
+          <tr><td class="rname">General PM</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">Leadership</td><td>Shared pool PM role; aligned to Transition segment</td></tr>
+          <tr><td class="rname">Sr. Technical Lead</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">Leadership</td><td>Shared pool with New Sr. Technical Lead (×2)</td></tr>
+          <tr><td class="rname">Sr. Technical BSA</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">Business Analysis</td><td>Eliminated in proposed model; function absorbed into shared BSA pool</td></tr>
+          <tr><td class="rname">CADM Testing &amp; Compliance</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">Compliance</td><td>CADM-specific; keep dedicated to Transition</td></tr>
+          <tr><td class="rname">Tier 1 Support</td><td class="tc"><span class="cnt-badge">×7</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">Support</td><td>Largest single role; co-mingled under SQL/DE practice in shared pool</td></tr>
+          <tr><td class="rname">Tier 2 Support</td><td class="tc"><span class="cnt-badge">×1</span></td><td class="tc"><span class="seg-pill sp-t">Transition</span></td><td class="tc">Support</td><td>Co-mingled under SQL/DE practice in shared pool</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ch-foot"><span>Accenture × Thermo Fisher Scientific — CRG Data Capabilities Staffing Review</span><span>CONFIDENTIAL</span></div>
+  </div>
+</div>
+
+<!-- S5 -->
+<div class="slide" id="slide-5">
+  <div class="chrome">
+    <div class="ch-head">
+      <div><div class="eyebrow">Proposed Staffing Model</div><h2>Original Roles, Change &amp; New HC — <span style="color:var(--tf)">by Customer Pod, New Roles &amp; Transition</span></h2></div>
+      <div class="ch-num">05</div>
+    </div>
+    <div class="ch-body" style="padding-top:12px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:var(--black);padding:11px 16px;border-left:4px solid var(--tf)"><div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:2px">Total after reduction</div><div style="font-size:26px;font-weight:900;color:#fff;line-height:1">40</div><div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:2px">vs 58 original · −18 roles</div></div>
+        <div style="background:#fce9e2;padding:11px 16px;border-left:4px solid var(--tf)"><div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9a3020;margin-bottom:2px">Customer Pod</div><div style="font-size:26px;font-weight:900;color:var(--tf);line-height:1">8 <span style="font-size:12px;color:#9a3020">/ 12</span></div><div style="font-size:10px;color:#9a3020;margin-top:2px">−4 roles</div></div>
+        <div style="background:#d6f2e8;padding:11px 16px;border-left:4px solid #085041"><div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#085041;margin-bottom:2px">New Roles</div><div style="font-size:26px;font-weight:900;color:#085041;line-height:1">10 <span style="font-size:12px;color:#085041">/ 16</span></div><div style="font-size:10px;color:#085041;margin-top:2px">−6 roles</div></div>
+        <div style="background:#ece9fc;padding:11px 16px;border-left:4px solid #3C3489"><div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3C3489;margin-bottom:2px">Transition</div><div style="font-size:26px;font-weight:900;color:#3C3489;line-height:1">19 <span style="font-size:12px;color:#3C3489">/ 30</span></div><div style="font-size:10px;color:#3C3489;margin-top:2px">−11 roles</div></div>
+      </div>
+      <table class="seg-tbl">
+        <thead>
+          <tr>
+            <th class="tl" style="background:var(--black);color:#fff;width:22%">Role</th>
+            <th style="background:var(--black);color:#fff;width:8%">Type</th>
+            <th style="background:#2a2a2a;color:#ccc;width:6%">Orig</th>
+            <th style="background:#2a2a2a;color:#7dffb0;width:7%">Reduced</th>
+            <th style="background:#2a2a2a;color:#ff9999;width:6%">Delta</th>
+            <th style="background:#ece9fc;color:#3C3489;width:17%">Transition</th>
+            <th style="background:#d6f2e8;color:#085041;width:17%">New Roles</th>
+            <th style="background:#fce9e2;color:#712B13;width:17%">Customer Pod</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="grp"><td colspan="8">Overarching Delivery Leadership</td></tr>
+          <tr class="dr"><td class="tl">Onshore Delivery Lead</td><td><span class="tp tp-al">All</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td><span class="cb-t">✓</span></td><td><span class="cb-n">✓</span></td><td><span class="cb-c">✓</span></td></tr>
+          <tr class="dr"><td class="tl">Offshore Delivery Lead</td><td><span class="tp tp-al">All</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td><span class="cb-t">✓</span></td><td><span class="cb-n">✓</span></td><td><span class="cb-c">✓</span></td></tr>
+          <tr class="dr"><td class="tl">Data Partner</td><td><span class="tp tp-al">All</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td><span class="cb-t">✓</span></td><td><span class="cb-n">✓</span></td><td><span class="cb-c">✓</span></td></tr>
+          <tr class="stl"><td class="tl">Subtotal</td><td></td><td>3</td><td style="color:#085041;font-weight:700">3</td><td class="dim">0</td><td colspan="3"></td></tr>
+          <tr class="grp"><td colspan="8">Leadership &amp; Management</td></tr>
+          <tr class="dr"><td class="tl">Sr. Technical Lead</td><td><span class="tp tp-sh">Shared</span></td><td>×2</td><td style="color:#085041;font-weight:700">×1</td><td class="red">−1</td><td><span class="cb-t">×1</span></td><td><span class="cb-n">×1</span></td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">Portfolio / Product Mgr</td><td><span class="tp tp-sh">Shared</span></td><td>×2</td><td style="color:#085041;font-weight:700">×1</td><td class="red">−1</td><td class="dim">—</td><td><span class="cb-n">×1</span></td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">General PM / PM Lead</td><td><span class="tp tp-sh">Shared</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td><span class="cb-t">×1</span></td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">Technical Delivery Lead</td><td><span class="tp tp-sh">Shared</span></td><td>×2</td><td style="color:#085041;font-weight:700">×1</td><td class="red">−1</td><td class="dim">—</td><td><span class="cb-n">×1</span></td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">Data Architect</td><td><span class="tp tp-sh">Shared</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td class="dim">—</td><td><span class="cb-n">×1</span></td><td class="dim">—</td></tr>
+          <tr class="stl"><td class="tl">Subtotal</td><td></td><td>8</td><td style="color:#085041;font-weight:700">5</td><td class="red">−3</td><td colspan="3"></td></tr>
+          <tr class="grp"><td colspan="8">Business Analysis</td></tr>
+          <tr class="dr"><td class="tl">BSA</td><td><span class="tp tp-sh">Shared</span></td><td>×9</td><td style="color:#085041;font-weight:700">×5</td><td class="red">−4</td><td><span class="cb-t">×2</span></td><td><span class="cb-n">×1</span></td><td><span class="cb-c">×2</span></td></tr>
+          <tr class="dr elim"><td class="tl">Sr. Technical BSA</td><td><span class="tp tp-el">Elim.</span></td><td>×1</td><td class="dim">×0</td><td class="red">−1</td><td style="font-size:10px;color:#bbb">was ×1</td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr class="stl"><td class="tl">Subtotal</td><td></td><td>10</td><td style="color:#085041;font-weight:700">5</td><td class="red">−5</td><td colspan="3"></td></tr>
+          <tr class="grp"><td colspan="8">Data Governance</td></tr>
+          <tr class="dr"><td class="tl">DG / MDM Analyst (Data Domains)</td><td><span class="tp tp-sh">Shared</span></td><td>×4</td><td style="color:#085041;font-weight:700">×3</td><td class="red">−1</td><td class="dim">—</td><td><span class="cb-n">×3</span></td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">DG / MDM Analyst (Data Governance)</td><td><span class="tp tp-sh">Shared</span></td><td>×2</td><td style="color:#085041;font-weight:700">×2</td><td class="dim">—</td><td class="dim">—</td><td><span class="cb-n">×2</span></td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">Data Quality Engineer</td><td><span class="tp tp-sh">Shared</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td class="dim">—</td><td><span class="cb-n">×1</span></td><td class="dim">—</td></tr>
+          <tr class="stl"><td class="tl">Subtotal</td><td></td><td>7</td><td style="color:#085041;font-weight:700">6</td><td class="red">−1</td><td colspan="3"></td></tr>
+          <tr class="grp"><td colspan="8">QA &amp; Testing</td></tr>
+          <tr class="dr"><td class="tl">QA / ETL Tester</td><td><span class="tp tp-sh">Shared</span></td><td>×5</td><td style="color:#085041;font-weight:700">×3</td><td class="red">−2</td><td><span class="cb-t">×2</span></td><td class="dim">—</td><td><span class="cb-c">×1</span></td></tr>
+          <tr class="stl"><td class="tl">Subtotal</td><td></td><td>5</td><td style="color:#085041;font-weight:700">3</td><td class="red">−2</td><td colspan="3"></td></tr>
+          <tr class="grp"><td colspan="8">Development &amp; Engineering</td></tr>
+          <tr class="dr"><td class="tl">DBT / Snowflake Developer</td><td><span class="tp tp-dd">Ded.</span></td><td>×2</td><td style="color:#085041;font-weight:700">×2</td><td class="dim">—</td><td><span class="cb-t">×2</span></td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">CADM Sr. DBT / SQL</td><td><span class="tp tp-dd">Ded.</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td><span class="cb-t">×1</span></td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">Developer (Post-Prod Support)</td><td><span class="tp tp-dd">Ded.</span></td><td>×2</td><td style="color:#085041;font-weight:700">×2</td><td class="dim">—</td><td><span class="cb-t">×2</span></td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">Databricks Developer</td><td><span class="tp tp-dd">Ded.</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td><span class="cb-c">×1</span></td></tr>
+          <tr class="stl"><td class="tl">Subtotal</td><td></td><td>6</td><td style="color:#085041;font-weight:700">6</td><td class="dim">0</td><td colspan="3"></td></tr>
+          <tr class="grp"><td colspan="8">SQL &amp; Data Engineering</td></tr>
+          <tr class="dr"><td class="tl">SQL / Data Engineer</td><td><span class="tp tp-sh">Shared</span></td><td>×6</td><td style="color:#085041;font-weight:700">×4</td><td class="red">−2</td><td><span class="cb-t">×3</span></td><td class="dim">—</td><td><span class="cb-c">×1</span></td></tr>
+          <tr class="dr sub"><td class="tl">↳ Tier 1 Support</td><td><span class="tp tp-sh">Shared</span></td><td>×7</td><td style="color:#085041;font-weight:700">×4</td><td class="red">−3</td><td><span class="cb-t">×4</span></td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr class="dr sub"><td class="tl">↳ Tier 2 Support</td><td><span class="tp tp-sh">Shared</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td><span class="cb-t">×1</span></td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">Talend Developer</td><td><span class="tp tp-sh">Shared</span></td><td>×3</td><td style="color:#085041;font-weight:700">×2</td><td class="red">−1</td><td><span class="cb-t">×2</span></td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr class="stl"><td class="tl">Subtotal</td><td></td><td>17</td><td style="color:#085041;font-weight:700">11</td><td class="red">−6</td><td colspan="3"></td></tr>
+          <tr class="grp"><td colspan="8">Compliance &amp; POD Delivery</td></tr>
+          <tr class="dr"><td class="tl">CADM Testing &amp; Compliance</td><td><span class="tp tp-dd">Ded.</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td><span class="cb-t">×1</span></td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr class="dr"><td class="tl">Scrum Master</td><td><span class="tp tp-dd">Ded.</span></td><td>×1</td><td style="color:#085041;font-weight:700">×1</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td><span class="cb-c">×1</span></td></tr>
+          <tr class="gtot">
+            <td class="tl">Grand Total</td><td></td>
+            <td style="color:#ccc;font-weight:700">63</td>
+            <td style="color:#7dffb0;font-weight:900;font-size:14px">47</td>
+            <td style="color:var(--tf);font-weight:900;font-size:14px">−16</td>
+            <td style="color:#b8b0f0;font-weight:700">~20</td>
+            <td style="color:#7dffb0;font-weight:700">~8</td>
+            <td style="color:#ffb0a0;font-weight:700">~9</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="display:flex;gap:16px;margin-top:10px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:9px;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:1px">Key:</span>
+        <span style="font-size:10px;background:#FFF0C2;color:#8a5e00;padding:2px 8px;border-radius:4px;font-weight:600;border:1px solid #E6A817">Shared</span><span style="font-size:10px;color:#888">pool serves all segments</span>
+        <span style="font-size:10px;background:#eeeeff;color:#444499;padding:2px 8px;border-radius:4px;font-weight:600;border:1px solid #aaaadd">Ded.</span><span style="font-size:10px;color:#888">dedicated to one segment</span>
+        <span style="font-size:10px;background:#d6f2e8;color:#085041;padding:2px 8px;border-radius:4px;font-weight:600;border:1px solid #085041">All</span><span style="font-size:10px;color:#888">spans all three segments</span>
+        <span style="font-size:10px;background:#f3e8ff;color:#6c3483;padding:2px 8px;border-radius:4px;font-weight:600;border:1px solid #9b59b6">Elim.</span><span style="font-size:10px;color:#888">eliminated / absorbed</span>
+      </div>
+    </div>
+    <div class="ch-foot"><span>Accenture × Thermo Fisher Scientific — CRG Data Capabilities Staffing Review</span><span>CONFIDENTIAL</span></div>
+  </div>
+</div>
+
+<!-- S6 -->
+<div class="slide" id="slide-6">
+  <div class="chrome">
+    <div class="ch-head"><div><div class="eyebrow">The Solution</div><h2>A Three-Tier Operating Model <span style="color:var(--tf)">Built Around Shared Capability</span></h2></div><div class="ch-num">06</div></div>
+    <div class="ch-body">
+      <div class="two-col">
+        <div>
+          <div class="model-layer ml-d"><div class="ml-title">Tier 1 — Overarching Delivery Leadership</div><div class="layer-roles"><span class="chip cg">Onshore Delivery Lead</span><span class="chip cg">Offshore Delivery Lead</span><span class="chip cg">Data Partner</span></div></div>
+          <div class="model-layer ml-s"><div class="ml-title">Tier 2 — Shared Resource Pool (25 roles after 40% reduction)</div><div class="layer-roles"><span class="chip ca">Sr. Technical Lead</span><span class="chip ca">BSA ×5</span><span class="chip ca">DG/MDM Analyst ×4</span><span class="chip ca">QA/ETL Tester ×3</span><span class="chip ca">SQL/Data Eng. ×4</span><span class="chip ca">Talend Dev. ×2</span><span class="chip ca">Data Quality Eng.</span><span class="chip ca">Data Architect</span><span class="chip ca">Portfolio/Product Mgr</span><span class="chip ca">Tier 1 Support ×5</span><span class="chip ca">Tier 2 Support</span></div></div>
+          <div class="model-layer ml-g"><div class="ml-title">Tier 3 — Dedicated Segment Roles (19 roles)</div><div class="layer-roles"><span class="chip cp">DBT/Snowflake Dev. ×2</span><span class="chip cp">CADM DBT/SQL</span><span class="chip cp">Post-Prod Dev. ×2</span><span class="chip cp">CADM Compliance</span><span class="chip ct">Tech. Delivery Lead</span><span class="chip ct">Rapid Insights POD</span><span class="chip cc">Databricks Dev.</span><span class="chip cc">Scrum Master</span></div></div>
+        </div>
+        <div class="side-stats">
+          <div class="sr"><div class="sn n-tf">3</div><div class="st"><strong>Delivery leads span all segments</strong> — Onshore, Offshore, and Data Partner carry accountability across Transition, New, and Customer simultaneously.</div></div>
+          <div class="sr"><div class="sn n-am">22</div><div class="st"><strong>Roles consolidated into the shared pool</strong> — drawn from three siloed segment teams, eliminating duplication in BSA, governance, QA, and engineering.</div></div>
+          <div class="sr"><div class="sn n-pu">14</div><div class="st"><strong>Dedicated roles remain segment-specific</strong> — where work is genuinely unique to a segment (CADM, Databricks, post-prod), roles stay dedicated.</div></div>
+          <div class="sr"><div class="sn n-tf">−31%</div><div class="st"><strong>Reduction applied to the shared pool</strong> — driving an overall 31% headcount reduction while maintaining full CRG Data delivery capacity.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="ch-foot"><span>Accenture × Thermo Fisher Scientific — CRG Data Capabilities Staffing Review</span><span>CONFIDENTIAL</span></div>
+  </div>
+</div>
+
+</div>
+
+<div class="nav">
+  <button class="nbtn" onclick="prev()">&#8592;</button>
+  <div class="ndot active" onclick="goTo(1)"></div>
+  <div class="ndot" onclick="goTo(2)"></div>
+  <div class="ndot" onclick="goTo(3)"></div>
+  <div class="ndot" onclick="goTo(4)"></div>
+  <div class="ndot" onclick="goTo(5)"></div>
+  <div class="ndot" onclick="goTo(6)"></div>
+  <button class="nbtn" onclick="next()">&#8594;</button>
+</div>
+
+<script>
+var cur=1,tot=6;
+function goTo(n){
+  document.getElementById('slide-'+cur).classList.remove('active');
+  document.getElementById('slide-'+n).classList.add('active');
+  document.querySelectorAll('.ndot')[cur-1].classList.remove('active');
+  document.querySelectorAll('.ndot')[n-1].classList.add('active');
+  cur=n;
+  document.getElementById('counter-top').textContent=(cur<10?'0'+cur:cur)+' / 0'+tot;
+}
+function next(){if(cur<tot)goTo(cur+1);}
+function prev(){if(cur>1)goTo(cur-1);}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')next();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')prev();
+});
+</script>
+</body>
+</html>
